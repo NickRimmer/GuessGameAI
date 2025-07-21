@@ -1,0 +1,8 @@
+POST {{host-tg}}/setWebhook
+
+{
+ "url": "{{host}}/api/tg/webhook",
+ "secret_token": "{{apiToken}}",
+ "allowed_updates": ["message", "callback_query"],
+ "drop_pending_updates": true,
+}

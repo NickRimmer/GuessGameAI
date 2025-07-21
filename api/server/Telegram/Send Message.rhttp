@@ -1,0 +1,20 @@
+POST {{host-tg}}/sendMessage
+
+{
+  "chat_id": {{chat-id}},
+  "text": "Hi\nPlayers: 1",
+  "reply_markup": {
+    "inline_keyboard": [
+      [
+        {
+          "text": "Run",
+          "callback_data": "run"
+        },
+        {
+          "text": "Cancel",
+          "callback_data": "cancel"
+        }
+      ]
+    ]
+  }
+}

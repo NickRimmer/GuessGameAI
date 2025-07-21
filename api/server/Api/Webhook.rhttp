@@ -1,0 +1,33 @@
+// host: http://mini:5679
+
+POST {{host}}/api/tg/webhook
+
+{
+  "update_id" : 529737500,
+  "message" : {
+    "message_id" : 72,
+    "from" : {
+      "id" : 214820691,
+      "is_bot" : false,
+      "first_name" : "Nick",
+      "last_name" : "Rimmer",
+      "username" : "NickRimmer",
+      "language_code" : "en",
+      "is_premium" : true
+    },
+    "chat" : {
+      "id" : {{chat-id}},
+      "first_name" : "Nick",
+      "last_name" : "Rimmer",
+      "username" : "NickRimmer",
+      "type" : "private"
+    },
+    "date" : 1734107757,
+    "text" : "/settings",
+    "entities" : [ {
+      "offset" : 0,
+      "length" : 9,
+      "type" : "bot_command"
+    } ]
+  }
+}

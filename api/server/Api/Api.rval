@@ -1,0 +1,3 @@
+// headers
+@X-Telegram-Bot-Api-Secret-Token: {{apiToken}}
+## provider: RestApia.Extensions.ValuesProvider.CollectionValuesProvider.UserValuesProvider

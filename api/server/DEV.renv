@@ -1,0 +1,7 @@
+host: https://dev.debugging.ninja
+
+apiToken: {{dev-apiToken}}
+chat-id: -4925428543
+
+// telegram token
+tg-token: {{dev-tgToken}}

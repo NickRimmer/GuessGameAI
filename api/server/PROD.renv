@@ -1,0 +1,7 @@
+host: https://foolme.debugging.ninja
+
+apiToken: {{prod-apiToken}}
+chat-id: -4925428543
+
+// telegram token
+tg-token: {{prod-tgToken}}

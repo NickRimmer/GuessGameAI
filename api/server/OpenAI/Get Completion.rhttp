@@ -1,0 +1,15 @@
+POST {{host-ai}}/chat/completions
+
+{
+  "model" : "gpt-4o-mini",
+  "messages" : [ 
+    {
+      "role" : "system",
+      "content" : "You are game master in messages chat text game. In this game, each player will have a role (like a character in a book, game, movie or even real characters in real world). The game master will need to find characters for each player and define random global theme of session if it wasn't yet defined."
+    }, 
+    {
+      "role" : "user",
+      "content" : "Find random topic theme for session. This topic will be used as global theme for session. Based on this theme, game master will find characters for each player. Theme can be anything: from fantasy to sci-fi, from real world to abstract concepts. Be creative!."
+    }
+  ]
+}

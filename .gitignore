@@ -1,0 +1,27 @@
+# Solution folders
+_temp/
+_tmp/
+_publish/
+
+# Common settings
+.vs/
+.vscode/
+.idea
+.nuke/temp/
+src/**/[Bb]in/
+src/**/[Oo]bj/
+packages/
+_ReSharper*/
+_dotCover*/
+node_modules/
+
+# local settings
+.local/
+*.local.*
+
+*.suo
+*.user
+*.sln.docstates
+riderModule.iml
+Thumbs.db
+src/FoolMeGame/data
