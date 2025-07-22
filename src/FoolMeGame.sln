@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoolMeGame", "FoolMeGame\FoolMeGame.csproj", "{6A6C010F-65BF-445A-BD24-1505F13FF99C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessTheWord.Business", "GuessTheWord.Business\GuessTheWord.Business.csproj", "{61DE7FE5-9F65-436C-A340-BE3C90EAF78B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoolMeGame.Shared", "FoolMeGame.Shared\FoolMeGame.Shared.csproj", "{B8DF8774-89CB-4772-8FC3-074A6BCF8378}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{6A6C010F-65BF-445A-BD24-1505F13FF99C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A6C010F-65BF-445A-BD24-1505F13FF99C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A6C010F-65BF-445A-BD24-1505F13FF99C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61DE7FE5-9F65-436C-A340-BE3C90EAF78B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61DE7FE5-9F65-436C-A340-BE3C90EAF78B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61DE7FE5-9F65-436C-A340-BE3C90EAF78B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61DE7FE5-9F65-436C-A340-BE3C90EAF78B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8DF8774-89CB-4772-8FC3-074A6BCF8378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8DF8774-89CB-4772-8FC3-074A6BCF8378}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8DF8774-89CB-4772-8FC3-074A6BCF8378}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8DF8774-89CB-4772-8FC3-074A6BCF8378}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
