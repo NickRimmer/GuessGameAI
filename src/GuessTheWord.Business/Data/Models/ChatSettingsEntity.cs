@@ -8,7 +8,7 @@ public record ChatSettingsEntity
 
     public string Language { get; init; } = "Russian";
 
-    public int MaxWordsHint { get; init; } = 1;
+    public int MaxWordsHint { get; init; } = 10;
 
     public int MinPlayersToStart { get; init; } = 2;
     public int MaxPlayersToPlay { get; init; } = 5;
