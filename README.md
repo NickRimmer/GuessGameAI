@@ -10,7 +10,7 @@ Telegram bot for 'Guess The Word' game
   - Set `OpenAISettings.ApiKey` with your OpenAI access key
 - Update constants `src/FoolMeGame/Constants.cs`, set `GlobalAdminUserId` your Telegram user id (TBD - add it to appsettings)
  - Register Telegram webhook to your server `POST https://api.telegram.org/bot{TelegramSettings.Token}/setWebhook?url={url_to_send_updates_to}`
- - Make sure your Bot has turned off `Group Policy` or add Bot permissions in group to read messages
+ - Make sure your Bot has admin rights in group with reading, editing and pinning of messages permissions
  - Build and Run `src/FoolMeGame/FoolMeGame.csproj`
  - Create a group in Telegram
    - Add your Bot to the group
