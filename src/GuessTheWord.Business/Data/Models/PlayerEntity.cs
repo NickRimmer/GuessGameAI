@@ -13,5 +13,5 @@ public record PlayerEntity
 
     public int PlayedGames { get; init; }
 
-    public DateTime LastGameAtUtc { get; set; }
+    public DateTime LastGameAtUtc { get; init; }
 }

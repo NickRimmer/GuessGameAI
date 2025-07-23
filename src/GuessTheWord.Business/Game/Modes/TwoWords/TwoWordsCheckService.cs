@@ -40,10 +40,11 @@ public class TwoWordsCheckService : IHintCheckService
                 "",
                 "The hint is considered **invalid** if it contains:",
                 "- The exact adjective or noun from the secret target phrase.",
-                "- Any grammatical form of words from secret phrase (e.g., plural, gender).",
+                "- Plural or Gender form of words from secret phrase.",
                 "",
                 "Otherwise, the hint is **valid**.",
-                "- Antonyms, synonyms of the target words are allowed.",
+                "- Antonyms are allowed.",
+                "- Synonyms are allowed.",
             }.Join("\n")),
 
             new UserChatMessage($"Secret phrase `{secretPhrase}`. Is this hint `{hint}` valid?"),
@@ -76,8 +77,9 @@ public class TwoWordsCheckService : IHintCheckService
             var validationResult = JsonSerializer.Deserialize<HintValidationJson>(result, _jsonSettings) ?? new HintValidationJson { IsValid = false };
             return new ValidationResult(validationResult.IsValid, validationResult.Reason);
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Failed to deserialize JSON response: {Response}", result);
             return ValidationResult.Invalid;
         }
     }
@@ -145,11 +147,12 @@ public class TwoWordsCheckService : IHintCheckService
                                         "type": "boolean",
                                         "description": "Indicates whether the word is correct in the context of the target phrase."
                                     }
-                                }
+                                },
+                                "required": ["word", "isCorrect"]
                             }
                         }
                       },
-                      "required": ["validationResult", "Reason"],
+                      "required": ["words"],
                       "additionalProperties": false
                     }
                     """u8.ToArray())),
@@ -197,7 +200,7 @@ public class TwoWordsCheckService : IHintCheckService
                 "- Do not use punctuation, explanation, or reasoning.",
                 "- Do not repeat any of your previous guesses.",
                 "- Do not guess any of the hints directly — the secret phrase is never among the hints.",
-                "- Do not use words from the hints as guesses, they are not part of the secret phrase.",
+                "- Do not use any words from the hints in guesses, they can not be part of the secret phrase.",
                 "- Make your best educated guess based on the hints, previous guesses, and what is already revealed.",
                 "",
                 "Hints may be metaphorical, descriptive, or associative.",
