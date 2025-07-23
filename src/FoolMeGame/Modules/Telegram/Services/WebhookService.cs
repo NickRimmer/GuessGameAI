@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using FoolMeGame.Shared.Telegram;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 namespace FoolMeGame.Modules.Telegram.Services;

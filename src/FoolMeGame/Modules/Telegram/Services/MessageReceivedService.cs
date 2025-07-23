@@ -1,34 +1,33 @@
-﻿using System.Reflection;
-using FoolMeGame.Modules.Telegram.Models;
+﻿using FoolMeGame.Shared.Levels;
+using FoolMeGame.Shared.Settings;
+using FoolMeGame.Shared.Telegram;
+using GuessTheWord.Business;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 namespace FoolMeGame.Modules.Telegram.Services;
 
 public class MessageReceivedService
 {
-    private readonly IEnumerable<IMessageTextHandler> _textHandlers;
-    private readonly ChatSettingsService _chatSettings;
+    private readonly LevelsProvider _levelsProvider;
+    private readonly ISettingsManager _settingsManager;
     private readonly TelegramHelper _telegram;
-    private readonly IReadOnlyCollection<IMessageCommandHandler> _commandHandlers;
 
     public MessageReceivedService(
-        IEnumerable<IMessageCommandHandler> commandHandlers,
-        IEnumerable<IMessageTextHandler> textHandlers,
-        ChatSettingsService chatSettings,
+        LevelsProvider levelsProvider,
+        ISettingsManager settingsManager,
         TelegramHelper telegram)
     {
-        _textHandlers = textHandlers ?? throw new ArgumentNullException(nameof(textHandlers));
-        _chatSettings = chatSettings ?? throw new ArgumentNullException(nameof(chatSettings));
+        _levelsProvider = levelsProvider ?? throw new ArgumentNullException(nameof(levelsProvider));
+        _settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
         _telegram = telegram ?? throw new ArgumentNullException(nameof(telegram));
-        _commandHandlers = commandHandlers?.ToList() ?? throw new ArgumentNullException(nameof(commandHandlers));
     }
 
     public async Task<IResult> HandleAsync()
     {
         var message = _telegram.Message;
-        var isChatRegistered = _chatSettings.IsChatRegistered(message.Chat.Id);
+        var isChatRegistered = _settingsManager.TryGetSettings(message.Chat.Id, out _);
 
-        if (message.From?.Id != Constants.GlobalAdminUserId && !isChatRegistered)
+        if (message.From?.Id != GameInfo.GlobalAdminUserId && !isChatRegistered)
         {
             await _telegram.SendMessageBackAsync($"You are not whitelisted to use this bot ({message.Chat.Id})", asReply: true);
             return Results.Ok();
@@ -59,30 +58,13 @@ public class MessageReceivedService
             .ToList() ?? [];
         if (data.Count == 0) return null;
 
-        // load handlers
-        var handlers = _commandHandlers
-            .Select(x => new {
-                Handler = x,
-                Attribute = x.GetType().GetCustomAttribute<CommandNamesAttribute>(),
-            })
-            .ToList();
-
         // try handle commands
-        var handled = false;
         foreach (var d in data)
         {
-            var found = handlers
-                .Select(x => new {
-                    Command = x.Attribute?.Commands.FirstOrDefault(c => c.Equals(d.Command, StringComparison.OrdinalIgnoreCase)),
-                    x.Handler,
-                })
-                .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.Command));
-
-            if (found == null) continue;
-            handled = await found.Handler.HandleAsync(new TelegramCommand(message, message.From, d.Entity, found.Command!));
+            if (string.IsNullOrWhiteSpace(d.Command) || !_levelsProvider.TryGet(message.Chat.Id, d.Command, out var action, out var command)) continue;
+            await action.HandleAsync(new TelegramCommand(message, message.From, d.Entity, command));
+            return Results.Ok();
         }
-
-        if (handled) return Results.Ok();
 
         // send message back about unknown command
         await _telegram.SendMessageBackAsync($"Unknown command: {data.Select(x => x.Command).Join(", ")}", asReply: true);
@@ -94,16 +76,20 @@ public class MessageReceivedService
         if (message.From == null || string.IsNullOrWhiteSpace(message.Text))
             return null;
 
-        foreach (var handler in _textHandlers)
-            if (await handler.HandleAsync(new TelegramText(message, message.From)))
-                break;
+        if (_levelsProvider.TryGet(message.Chat.Id, LevelActionAttribute.TextCommand, out var action, out var command))
+            await action.HandleAsync(new TelegramCommand(message, message.From, null, command));
 
         return Results.Ok();
     }
 
     private async Task<IResult> HandleUnknownAsync(Message message)
     {
-        // await _telegram.SendMessageBackAsync("I don't understand you 😕", asReply: true);
+        if (message.Type == MessageType.PinnedMessage)
+        {
+            // delete message about pinned message
+            await _telegram.DeleteMessageAsync(message.Id);
+        }
+
         return Results.Ok();
     }
 }

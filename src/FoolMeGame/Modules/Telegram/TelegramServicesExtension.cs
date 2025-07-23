@@ -1,36 +1,29 @@
 ﻿using System.Reflection;
 using FoolMeGame.Modules.Telegram.Services;
+using FoolMeGame.Shared.Levels;
+using GuessTheWord.Business;
 namespace FoolMeGame.Modules.Telegram;
 
 public static class TelegramServicesExtension
 {
     public static IServiceCollection AddTelegramCommands(this IServiceCollection services)
     {
-        typeof(IMessageCommandHandler)
+        typeof(Program)
             .Assembly
             .GetTypes()
-            .Where(x => x.GetCustomAttribute<CommandNamesAttribute>() != null && x.GetInterfaces().Contains(typeof(IMessageCommandHandler)))
+            .Where(x => x.GetCustomAttributes<LevelActionAttribute>().Any() && x.GetInterfaces().Contains(typeof(ILevelAction)))
             .ToList()
             .ForEach(x => services
-                .AddScoped(typeof(IMessageCommandHandler), x)
+                .AddScoped(typeof(ILevelAction), x)
                 .AddScoped(x));
 
-        typeof(IMessageCommandHandler)
+        typeof(GameInfo)
             .Assembly
             .GetTypes()
-            .Where(x => x.GetCustomAttribute<CommandNamesAttribute>() != null && x.GetInterfaces().Contains(typeof(ICallbackCommandHandler)))
+            .Where(x => x.GetCustomAttributes<LevelActionAttribute>().Any() && x.GetInterfaces().Contains(typeof(ILevelAction)))
             .ToList()
             .ForEach(x => services
-                .AddScoped(typeof(ICallbackCommandHandler), x)
-                .AddScoped(x));
-
-        typeof(IMessageCommandHandler)
-            .Assembly
-            .GetTypes()
-            .Where(x => x.GetInterfaces().Contains(typeof(IMessageTextHandler)))
-            .ToList()
-            .ForEach(x => services
-                .AddScoped(typeof(IMessageTextHandler), x)
+                .AddScoped(typeof(ILevelAction), x)
                 .AddScoped(x));
 
         return services;

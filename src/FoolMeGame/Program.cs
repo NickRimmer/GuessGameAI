@@ -1,11 +1,12 @@
 using AspNetCore.Authentication.ApiKey;
-using FoolMeGame.Modules.Agents;
-using FoolMeGame.Modules.Agents.Models;
+using FoolMeGame.Modules.Ai;
 using FoolMeGame.Modules.Auth;
-using FoolMeGame.Modules.Data;
-using FoolMeGame.Modules.Game;
 using FoolMeGame.Modules.Telegram;
 using FoolMeGame.Modules.Telegram.Services;
+using FoolMeGame.Shared.Data;
+using FoolMeGame.Shared.Levels;
+using FoolMeGame.Shared.Telegram;
+using GuessTheWord.Business;
 using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using Telegram.Bot;
@@ -33,15 +34,15 @@ builder.Services
     .AddScoped<WebhookService>()
     .AddScoped<QueryCallbackService>()
     .AddScoped<MessageReceivedService>()
+    .AddScoped<LevelsManager>()
+    .AddScoped<LevelsProvider>()
 
     // singletons
     .AddSingleton<DbStorage>()
-    .AddSingleton<RoomGameService>()
-    .AddSingleton<GameplayService>()
-    .AddSingleton<ChatSettingsService>()
 
     // services by areas
     .AddTelegramCommands()
+    .AddGameServices()
     .AddAiServices();
 
 builder.Services
